@@ -1,0 +1,9 @@
+acitveSelf属性可以控制物体的使能，但不会影响自物体的属性值
+activeInHierarchy属性不受父物体影响
+
+void DeactiveChildren(GameObject g, bool a){
+	g.activeSelf = a;
+	foreach(TRansform child in g.transform){
+		DeactiveChildren(child.gameObject, a);
+	}
+}

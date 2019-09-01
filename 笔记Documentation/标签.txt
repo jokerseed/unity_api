@@ -1,0 +1,30 @@
+
+//在指定物体位置创建预制体
+using UnityEngine;
+using System.Collections;
+
+public class Example: MonoBehaviour{
+	public GameObject respawnPrefab;
+	public GameObject respawn;
+	void Start(){
+		if(respawn == null){
+			respawn = GameObject.FindWithTag("Respawn");
+		}
+		Instantiate(respawnPrefab, respawn.transform.position, respawn.transform.rotation) as GameObject;
+	}
+}
+
+Tips====================================================================================
+只能为游戏对象分配一个标签
+unity中包含一些未出现在标签管理中的内置标签
+-Untagged
+-Respawn
+-Finish
+-EditorOnly
+-MainCamera
+-Player
+-GameController
+
+
+
+
