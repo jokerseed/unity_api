@@ -1,0 +1,27 @@
+资源包
+资源包是外部资源集合。可以拥有许多资源包，因此可以拥有许多不同的外部资源集合。这些文件
+存在与构建的Unity播放之外，通常位于web服务上，供最终用户动态访问。
+要构建资源包，可以在Editor脚本中调用BuildPipeline.BuildAssetBundls()。在参数中，指定要
+包含在构建文件中的对象数组以及一些其他选项。这将构建一个文件，稍后可以
+使用AssetBundle.LoadAsset()在运行时动态加载该文件。
+
+资源文件夹
+资源文件夹是包含在构建的Unity播放中但不一定链接到Inspector中任何游戏对象的资源集合。
+实际就是Resources。可在项目中以不同方式组织多个资源文件夹。每当想从其中一个文件夹加载资源是，
+可以调用Resources.Load()。
+
+注意：
+在Resources文件夹中的所有资源及其依赖都放在resources.assets的文件夹中。如果一个资源被一个
+关卡使用，则会存储到sharedAssets中。
+Resources.Load()只能访问Resources文件夹中的资源。然而更多资源可能最终出现在“resources.assets”
+文件中。
+
+资源卸载
+可通过调用AssetBundle.Unload()来卸载AssetBundle的资源。
+如果为unloadAllLoadedObjects参数传true，则AssetBundle内部保存的对象和使用AssetBundle.LoadAsset()
+从AssetBundle加载的对象都将被销毁并且捆绑包使用的内存将被释放。
+有时可能更希望加载 AssetBundle，实例化所需的对象，并释放捆绑包使用的内存，同时保留对象。
+好处是可以释放内存来用于其他任务，例如加载另一个 AssetBundle。
+在这种情况下，可传递 false 作为参数。销毁资源包后，无法再加载其中的对象。
+如果要在加载另一个关卡之前销毁使用 Resources.Load() 加载的场景对象，
+请对这些对象调用 Object.Destroy()。
