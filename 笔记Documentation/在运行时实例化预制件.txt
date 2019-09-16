@@ -1,0 +1,84 @@
+使用代码来修建砖墙==========================
+void Start(){
+	for(int y = 0; y < 5; y++){
+		for(int x = 0; x < 5; x++){
+			//CreatePrimitive创建unity基本物体如cube
+			GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+			cube.AddComponent<Rigidbody>();
+			cube.transform.position = new Vector3(x, y, 0);
+		}
+	}
+}
+
+
+使用预制件来创砖墙
+void Start(){
+	for(int y = 0; y < 5; y++){
+		for(int x = 0; x < 5; x++){
+			Instantiate(brick, new Vector3(x, y, 0), Quaternion.identity);
+		}
+	}
+}
+
+
+创建发射火箭=======================================
+public Rigidbody rocket;  //要求火箭是一个刚体
+public float speed = 10f;
+
+void FireRocket(){
+	Rigidbody rocketClone = (Rigidbody)Instantiate(rocket, transform.position, transform.rotation);
+	rocketClone.velocity = transform.forward * speed;
+	rocketClone.GetComponent<MyRocketScript>().DoSomethinf();
+}
+
+void Update(){
+	if(Input.GetButtonDown("Fire1")){
+		FireRocket();
+	}
+}
+
+用布娃娃或残骸替换角色==================================
+public GameObject wreck;
+
+3秒后自动将游戏对象变成残骸
+IEnumerator Start(){
+	yield return new WaitForSeconds(3);
+	KillSelf();
+}
+
+void KillSelf(){
+	// 在我们所处的同一位置将残骸游戏对象实例化
+	GameObject wreckClone = (GameObect)Instantiate(wreck, transform.position, transform.rotation);
+	//有时候需要将一些变量转移到残骸
+	wreckClone.GetComponent<MyScript>().someVariable = GetComponent<MyScript>().someVariable;
+	//自动终止
+	Destory(gameObject);
+}
+
+在特定图案中放置一堆对象=====================================
+//将圆形中的预制件实例化
+public GameObject prefab;
+public int numberOfObjects = 20;
+public float radius = 5f;
+
+void Start(){
+	for(int i = 0; i < numberOfObjects; i++){
+		float angle = i * Mathf.PI *2 / numberOfObjects;
+		Vector3 pos = new Vector3(Mathf.Cos(angle), 0, Mathf.Sin(angle)) * radius;
+		Instantiate(prefab, pos, Quaternion.identity);
+	}
+}
+//将网格中的预制件实例化
+public GameObject prefeb;
+public float gridX = 5f;
+public float gridY = 5f;
+public float spacing = 2f;
+
+void Start(){
+	for(int y = 0; y <gridY; y++){
+		for(int x = 0; x < gridX; x++){
+			Vector3 pos = new Vector3(x, 0, y) * spacing;
+			Instantiate(prefab, pos, Quaternion.identity);
+		}
+	}
+}

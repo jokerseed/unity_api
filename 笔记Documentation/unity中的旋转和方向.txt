@@ -1,0 +1,10 @@
+对脚本的影响
+处理脚本中的旋转时，应使用Quayternion类及其函数来创建和修改旋转值
+从旋转中检索、修改和重新应用欧拉值可能会导致意外的副作用。
+虽然可从四元数中检索欧拉角，但如果进行检索、修改和重新应用，则会出现问题。
+
+float x;
+void Updat(){
+	x += Time.deltaTime * 10;
+	transform.rotation = Quaternion.Euler(x, 0, 0);
+}
