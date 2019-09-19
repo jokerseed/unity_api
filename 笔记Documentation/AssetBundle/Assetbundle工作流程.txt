@@ -1,0 +1,30 @@
+为AssetBundle分配资源==============================
+1.从Project视图中选择要为捆绑包分配的资源
+2.在Inspector中检查对象
+3.在Inspector底部，应该会看到一个用于分配AssetBundle和变体的部分
+4.左侧下拉选单分配AssetBundle，而右侧下拉选单分配变量
+5.单击左侧下拉选单，其中显示“None”，表示当前注册的AssetBundle名称
+6.单击“New...”以创建新的AssetBundle
+7.输入所需的AssetBundle名称。请注意,AssetBundle名称支持某种类型的文件夹结构，具体取决于输入的内容。要添加
+  子文件夹，请用“/”分隔文件夹名称。例如：AssetBundle名称“environment/forest”将在environment子文件夹下创建
+  名为forest的捆绑包
+8.一旦选择或创建了AssetBundle名称，便可以重复此过程在右侧下拉选单中分配或创建变体名称（如果需要）。构建
+  AssetBundle不需要变体名称
+  
+构建AssetBundle=====================================
+在AssetBundle文件夹中创建一个名为Editor的文件夹，放入以下代码
+using UnityEditor;
+
+public class CreateAssetBundles
+{
+	[MenuItem("Asset/Build AssetBundles")]
+	static void BuildAllAssetBundles(){
+		string assetBundleDirectory = "Assets/AssetBundles";
+		if(!Directory.Exists(assetBundleDirectory)){
+			Directory.CreateDirectory(assetBundleDirectory);
+		}
+		BuildPipeline.BuildAssetBundles(assetBundleDirectory, BuildAssetBundleOptions.None, BuildTarget.StandaloneWindows);
+	}
+}
+
+此脚本将在Assets菜单底部创建一个名为“Build AssetBundles”的菜单项，该菜单项将执行与该标签关联的函数中的代码。
