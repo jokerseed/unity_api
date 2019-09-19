@@ -17,7 +17,7 @@ using UnityEditor;
 
 public class CreateAssetBundles
 {
-	[MenuItem("Asset/Build AssetBundles")]
+	[MenuItem("Assets/Build AssetBundles")]
 	static void BuildAllAssetBundles(){
 		string assetBundleDirectory = "Assets/AssetBundles";
 		if(!Directory.Exists(assetBundleDirectory)){
@@ -28,3 +28,36 @@ public class CreateAssetBundles
 }
 
 此脚本将在Assets菜单底部创建一个名为“Build AssetBundles”的菜单项，该菜单项将执行与该标签关联的函数中的代码。
+单击Build AssetBundles时，将随构建对话框一起显示一个进度条。此过程会获取带有AssetBundle名称标签的所有资源，并将他们
+放在assetBundleDirectory定义的路径文件夹中。
+
+加载AssetBundle和资源========================================
+从本地存储加载，可使用AssetBundles.LoadFromFile
+public class LoadFromFileExample : MonoBehaviour{
+	void Start(){
+		var myLoadedAssetBundle = AssetBundle.LoadFromFile(Path.Combine(Application.streamingAssetsPath,"myassetbundle"));
+		if(myLoadedAssetBundle == null){
+			Debug.log("Failed to load AssetBundle");
+			return;
+		}
+		var prefab = myLoadedAssetBundle.LoadAsset<GameObject>("MyObject"); //预制体好像也可以打包
+		Instantiate(prefab);
+	}
+}
+LoadFromFile获取捆绑包文件的路径
+
+如果是自己托管AssetBundle并需要将它们下载到游戏中，应使用UnityWebRequest
+IEnumerator InstantiateObject(){
+	string uri = "file:///" + Application.dataPath + "/AssetBundles" + assetBundleName;
+	UnityEngine.Networking.UnityWebRequest request = UnityEngine.Networking.UnityWebRequest.GetAssetBundle(uri,0);
+	yield return request.Send();
+	AssetBundle bundle = DownloadHandlerAssetBundle.GetContent(request);
+	GameObject cube = bundle.LoadAsset<GameObject>("Cube");
+	GameObject sprite = bundle.LoadAsset<GameObject>("Sprite");
+	Instantiate(cube);
+	Instantiate(sprite);
+}
+GetAssetBundle(string,int)获取AssetBundle的位置以及要下载的捆绑包版本
+UnityWebRequest有一个特定的句柄来处理AssetBundle
+DownloadHandlerAssetBundle，可根据请求获取AssetBundle
+
