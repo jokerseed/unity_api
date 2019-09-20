@@ -1,16 +1,18 @@
 ManifestFileVersion: 0
-CRC: 466671959
+CRC: 3579822284
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: dcc8108ea3429f1fab0a6e6ebc3a194f
+    Hash: 24e05ed9bf0b3461da666d47066dbb6c
   TypeTreeHash:
     serializedVersion: 2
-    Hash: f19fbf085e00d23fbc8d6cf7b345590b
+    Hash: ea5a42e0fd8ea905efa7aa926a3b8944
 HashAppended: 0
 ClassTypes:
 - Class: 28
   Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
 Assets:
-- Assets/Resources/timg.jpg
+- Assets/data/timg.jpg
 Dependencies: []

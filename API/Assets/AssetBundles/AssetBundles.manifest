@@ -1,7 +1,11 @@
 ManifestFileVersion: 0
-CRC: 1793512135
+CRC: 555357503
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
       Name: girl.sex
       Dependencies: {}
+    Info_1:
+      Name: pp
+      Dependencies:
+        Dependency_0: girl.sex

@@ -1,0 +1,43 @@
+BuildAssetBundleOptions
+BuildAssetBundleOptions.None：此捆绑包选项使用LZMA格式压缩，这是一个压缩的LZMA序列化数据文件流。
+							LZMA压缩要求在使用捆绑包之前对整个捆绑包进行解压缩。
+							由于需要解压缩，加载事件较长。
+							解压之后又会使用LZ4压缩技术在磁盘上重新压缩。这种方式文件小，加载快。
+BuildAssetBundleOptions.UncompressedAssetBundle:此捆绑包选项采用时数据完全未压缩的方式构建捆绑包。
+												缺点就是文件下载大小增大。但是下载后加载会变快。
+BuildAssetBundleOptions.ChunkBaseCompression:此捆绑包选项使用LZ4的压缩方法，所以压缩的文件大小比
+											LZMA更大，但不像LZMA那样需要解压整个包才能使用捆绑包。
+											LZ4使用基于块的算法，允许按段或块加载AssetBundle。解压缩
+											单个块即可使用包含的资源，即使其他AssetBundle块未解压。
+注意:后两种加载事件大致相当，后者减少了占用的磁盘大小。
+
+
+
+
+
+
+
+BuildTarget
+BuildTarget.Standalone：这里告诉我们构建管线，我们将这些AssetBundle用于哪些平台。
+
+
+AssetBundle文件=============================
+这是缺少.manifest扩展名的文件，其中包含在运动时为了加载资源而需要加载的内容。
+AssetBundle文件是一个存档，在内部包含多个文件。
+清单文件，如下
+ManifestFileVersion: 0
+CRC: 2422268106
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 8b6db55a2344f068cf8a9be0a662ba15
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 37ad974993dbaa77485dd2a0c38f347a
+HashAppended: 0
+ClassTypes:
+- Class: 91
+  Script: {instanceID: 0}
+Assets:
+  Asset_0: Assets/Mecanim/StateMachine.controller
+Dependencies: {}

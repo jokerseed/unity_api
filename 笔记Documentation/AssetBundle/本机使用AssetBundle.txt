@@ -1,0 +1,108 @@
+可以使用四种不同的API来加载AssetBundle。它们的行为根据加载捆绑包的平台和构建AssetBundle时使用的压缩方法而有所不同。
+四个API如下：AssetBundle.LoadFromMemoryAsync
+			AssetBundle.LoadFromFile
+			WWW.LoadfromCacheOrDownload   即将弃用（使用UnityWebRequest）
+			UnityWebRequest的DownloadHandlerAssetBundle
+
+
+AssetBundle.LoadFromMemorAsync
+此函数采用的包含AssetBundle数据的字节数组。也可以根据需要传递CRC值。如果捆绑包采用LZMA压缩方式，将在加载时解压AssetBundle。
+LZ4压缩包则会以压缩状态加载。
+using UnityEngine;
+using System.Collections;
+using System.IO;
+public class Example : MonoBehaviour
+{
+	IEnumerator LoadFromMemoryAsync(string path)
+	{
+		AssetBundleCreateRequest createRequest = AssetBundle.LoadFromMemoryAsync(File.ReadAllBytes(path));
+		yield return createRequest;
+		AssetBundle bundle = createRequest.assetBundle;
+		var prefab = bundle.LoadAsset<GameObject>("MyObject");
+		Instantiate(prefab);
+	}
+}
+
+
+AssetBundle.LaodFromFile
+从本地存储中加载未压缩的捆绑包，此API非常高效。
+如果捆绑包未压缩或采用了数据块 (LZ4) 压缩方式，LoadFromFile 将直接从磁盘加载捆绑包。
+使用此方法加载完全压缩的 (LZMA) 捆绑包将首先解压缩捆绑包，然后再将其加载到内存中。
+public class LoadFromFileExample : MonoBehaviour{
+	void Start(){
+		var myLoadedAssetBundle = AssetBundle.LoadFromFile(Path.Combine(Application.streamingAssetsPath, "myassetBundle"));
+		if(myLoadedAssetBundle == null){
+			Debug.Log("Failed to load AssetBundle");
+			return;
+		}
+		var prefab = myLoadedAssetBundle.LoadAsset<GameObject>("MyObject");
+		Instantiate(prefab);
+	}
+}
+
+
+UnityWebRequest
+UnityWebRequest有一个特定API调用来处理AssetBundle。
+首先，需要使用UnityWebRequest.GetAssetBundle来创建Web请求。
+返回请求后，请将请求对象传递给DownloadHandlerAssetBundle.GetContent(UnityWebRequest)。
+GetContent调用将返回AssetBundle对象。
+下载捆绑包后，还可以在DownloadHandlerAssetBundle类上使用assetBunle属性，从而以AssetBundle.LoadFromFile的效率加载AssetBundle。
+IEnumberator InstantiateObject(){
+	string uri = "file:///" + Application.dataPath + "/AssetBundle/" + assetBundleName;
+	UnityEngine.Networking.UnityWebRequest request = UnityEngine.Networking.UnityWebRequest.GetAssetBundle(uri,0);
+	yield return request.Send();
+	AssetBundle bundle = DownloadHandlerAssetBundle.GetContent(request);
+	GameObject cube = bundle.LaodAsset<GameObject>("Cube");
+	Instantiate(Cube);
+}
+使用UnityWebRequest的优点在于，它允许开发人员以更灵活的方式处理下载的数据，
+并可能消除不必要的内存使用。
+
+
+从AssetBundle加载资源=========================================================================
+现在已经成功下载AssetBundle，因此是时候加载一些资源了。
+通用代码片段：
+			T objectFromBudle = bundleObject.LoadAsset<T>(assetName);
+决定加载资源有四个方法：
+						同步加载：LoadAsset,LoadAllAssets
+						异步加载：LoadAssetAsync,LoadAllAssetAsync
+加载单个游戏对象：
+				GameObject gameObject = loadedAssetBundle.LoadAsset<GameObject>(assetName);
+加载所有资源：
+			Unity.Object[] objectArray = loadedAssetBundle.LoadAllAssets();
+异步加载对象类型或对象数组的情况下，异步方法返回AssetBundleRequest。
+AssetBundleRequest request = loadedAssetBundleObject.LoadAssetAsync<GameObject>(assetName);
+yield return request;
+var loadedAsset = request.asset;
+
+AssetBundleRequest request = loadedAssetBundle.LoadAllAssetsAsync();
+yield return request;
+var loadedAssets = request.allAssets;
+
+加载AssetBundle清单===============================
+加载AssetBundle清单可能非常有用。特别是在处理AssetBundle一来是关系时。
+要获得可用的AssetBundleManifest对象，需要加载另外的AssetBundle（与其所在的文件夹名称相同的那个）并从中加载AssetBundleManifest类型对象。
+AssetBundle assetBundle = AssetBundle.loadFromFile(manifestFilePath);
+AssetBundleManifest manifest = assetBundle;
+LoadAsset<AssetBundleManifest>("AssetBundleManifest");
+我们可以通过清单对象动态查找某个AssetBundle的依赖项
+AssetBundle assetBundle = AssetBundle.LoadFromFile(manifestFilePath);
+AssetBundleManifest manifest = assetBundle;
+LoadAsset<AssetBundleManifest>("AssetBundleManifest");
+string[] dependencies = manifest.GetAllDependencies("assetBundle");//传递想要依赖包的捆绑包的名称
+foreach(string dependency in dependencies){
+	AssetBundle.LoadFromFile(Path.Combine(assetBundlePath,dependency));
+}
+
+
+管理已加载的AssetBundle=============================================
+从活动场景中删除对象是，unity不会自动卸载对象。资源清理在特定时间触发，也可以手动触发。
+
+AssetBundle.Unload(true)卸载从AssetBundle加载的所有游戏对象，以及依赖项。
+但不包括复制的游戏对象（实例化的），因为不属于AssetBundle了。
+但是加载出来的纹理还属于bundle，会销毁。
+
+假设材质 M 是从 AssetBundle AB 加载的，如下所示。
+如果调用 AB.Unload(true)，活动场景中的任何 M 实例也将被卸载并销毁。
+如果改作调用 AB.Unload(false)，那么将会中断 M 和 AB 当前实例的链接关系。
+如果稍后再次加载 AB 并且调用 AB.LoadAsset()，则 Unity 不会将现有 M 副本重新链接到新加载的材质。而是将加载 M 的两个副本。
