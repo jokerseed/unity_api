@@ -1,0 +1,64 @@
+JSON序列化功能将对象转换为JSON格式或从JSON格式转换对象。此功能在与Web服务交互时很有用，也可直接用于轻松地将数据打包和解压为
+基于文本的格式。
+
+简单用法========================================
+JSON序列化功能围绕“结构化”JSON的概念而构建，因此可通过创建类或结构来描述将在JSON数据中存储的变量。
+[Serializable]
+public class MyClass{
+	public int level;
+	public float timeElapsed;
+	public string playerName;
+}
+
+此代码段定义了一个包含三个变量（level，timeElapsed和playerName）的普通C#类，并将该类标记为Serializable，这是使用JSON序列化
+程序所必须的。然后，可按如下方式创建该类的实例：
+
+MyClass myObject = new MyClass();
+myObject.level = 1;
+myObject.timeElapsed = 47.5f;
+myObject.playerName = "Dr Charles Francis";
+
+并使用JsonUtility.ToJson将其序列化为JSON格式：
+
+string json = JsonUtility.ToJson(myObject);
+
+因此将产生包含字符串的json变量：
+
+{"level":1,"timeElapsed":47.5,"playerName":"Dr Charles Francis"}
+
+要将JSON转换回对象头，请使用JsonUtility.FromJson:
+
+myObject = JsonUtility.FromJson<MyClass>(json);
+
+这将创建一个新的MyClass实例，并使用JSON数据设置该实例的值。如果JSON数据包含的值未映射到MyClass中的字段，则将忽略这些值，
+而如果JSON数据去烧MyClass字段的值，则这些字段将保留返回对象中的构造值。
+
+用JSON覆盖对象===================================================
+也可以获取JSON数据并在已经创建的对象之上反序列化该数据，从而覆盖已存在的数据：
+JsonUtility.FromJsonOverwrite(json,myObject);
+
+在JSON中不包含的对象上的任何字段都将保持不变。允许故意用仅包含一小部分字段的JSON来覆盖对象。
+
+JSON序列化程序API支持MonoBehaviour和ScriptableObject子类以及普通结构和类。但是，将JSON反序列化为MonoBehaviour或ScriptableObject的子类
+时，必须使用FromJsonOverwrite；FromJson不受支持并会抛出异常
+
+支持的类型====================================================
+FromJsonOverwrite该 API 支持任何 MonoBehaviour 子类、ScriptableObject 子类或者带有 [Serializable] 属性的普通类/结构
+不支持Dictionary或数组等
+
+在Editor中且仅在Editor中有一个并行API：EditorJsonUtility，允许将UnityEngine.Object派生的任何类型与JSON进行互相序列化。
+这样生成的JSON将包含与对象的YAML表示相同的数据。
+
+性能======================================
+GC内存使用量为最低量：
+ToJson()仅为返回的字符串分配GC内存
+FromJson()仅为返回的对象以及所需的所有子对象分配GC内存
+FromJsonOverwrite()仅根据需要为写入的字段分配内存
+
+在一个线程上序列化/反序列化对象时，应注意不要在另一个线程上访问和更改该对象
+
+控制ToJson()的输出=====================================
+ToJson支持完美打印JSON输出。默认关闭，通过参数传true打开
+
+未提前知道类型的情况下使用FromJson()==============================
+将JSON反序列化为包含“公共”字段的类或结构，然后使用这些字段来计算出想要的实际类型。然后第二次反序列化该类型。
