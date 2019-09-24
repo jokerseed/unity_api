@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2469897351
+CRC: 3607576604
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: a718bab3bf1583a83ea19ebf0ab47d3f
+    Hash: 2a8ed7f754e4d4f86ce0114b30c6e2de
   TypeTreeHash:
     serializedVersion: 2
     Hash: c14c144446a0d5e7633ca1d79f4d7b01
@@ -22,6 +22,6 @@ ClassTypes:
 - Class: 213
   Script: {instanceID: 0}
 Assets:
-- Assets/data/New Sprite.prefab
+- Assets/Resources/GameObject.prefab
 Dependencies:
 - E:/mymymymymymy/unity_api/API/Assets/AssetBundles/girl.sex

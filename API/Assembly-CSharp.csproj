@@ -63,6 +63,7 @@
     <Compile Include="Assets\Scripts\Api.cs" />
     <Compile Include="Assets\Scripts\ApiGameObject.cs" />
     <Compile Include="Assets\Scripts\ApiTime.cs" />
+    <Compile Include="Assets\Scripts\Doc_AssetBundleManager.cs" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>E:/mymymymymymy/unity_api/API/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
