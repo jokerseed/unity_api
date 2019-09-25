@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Editor\CreateAssetBundles.cs" />
+    <Compile Include="Assets\Editor\ScriptBath.cs" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>E:/mymymymymymy/unity_api/API/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
