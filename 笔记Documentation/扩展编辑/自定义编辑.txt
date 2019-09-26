@@ -1,0 +1,133 @@
+提高游戏创建速度的关键是为常用组件创建自定义编辑。举例来说，我们将使用一个很简单的脚本。
+改脚本总是让对象注视一个点。将此脚本添加到项目中，并将其放置到场景中的立方体游戏对象上。
+
+using UnityEngine;
+
+public class LookAtPoint : MonoBehaviour{
+	public Vector3 lookAtPoint = Vector.zero;
+	
+	void Update(){
+		transform.LookAt(lookAtPoint);
+	}
+}
+
+此脚本将使对象保持朝向世界空间中的点。目前，此脚本仅在播放模式下激活。编写编辑脚本时，
+在编辑模式期间执行某些脚本通常也很有用（未运行游戏）。
+
+using UnityEngine;
+
+[ExecuteInEditMode]
+public class LookAtPoint : MonoBehaviour{
+	public Vector3 lookAtPoint = Vector3.zero;
+	
+	void Update(){
+		transform.LookAt(lookAtPoint);
+	}
+}
+
+现在，如果在编辑中移动具有此脚本的对象，或在Inspector中更改“Look At Point”值（未运行时），
+对象会相应更新其方向，以便仍然注视世界控件中的目标点。
+
+创建自定义编辑==============================================================
+在Unity中创建脚本时，默认情况下，此脚本继承MonoBehaviour，因此可作为放在游戏对象上的组件。
+放置在游戏对象上时，Inspector会显示一个默认界面，用于查看和编辑可以显示的所有公共变量。
+
+自定义编辑器是一个单独脚本，可将此默认布局替换为选择的任何编辑控件。
+
+为了开始为LookAtPoint脚本创建自定义编辑，应创建同名（但是附加Editor）的另一脚本。
+using UnityEngine;
+using UnityEditor;
+
+[CustomEditor(typeof(LookAtPoint))]
+[CanEditMultipleObjects]
+public class LookAtPointEditor : Editor{
+	SerializedProperty lookAtPoint;
+	
+	void OnEnable(){
+		lookAtPoint = serializedObject.FindProperty("lookAtPoint");
+	}
+	
+	public override void OnInspectorGUI(){
+		serializedObject.Update();
+		EditorGUILayout.PropertyField(lookAtPoint);
+		serializedObject.ApplyModifiedProperties();
+	}
+}
+
+此类必须派生自Editor。CustomEditor属性告知Unity应该作为哪个组件的编辑。
+CanEditMultipleObjects属性告诉Unity，可以使用此编辑来选择多个对象并同时更改所有对象。
+
+只要Unity在Inspector中显示编辑，就执行OnInspectorGUI中的代码。可以在此处插入任何GUI代码。
+编辑会定义可用于访问所检查对象的目标属性。
+
+下面是一个简单示例，用于扩展编辑脚本以显示一条消息，指示目标点在游戏对象之上还是之下。
+using UnityEngine;
+using UnityEditor;
+
+[CustomEditor(typeof(LookAtPoint))]
+[CanEditMultipleObjects]
+public class LookAtPointEditor : Editor{
+	SerializedProperty lookAtPoint;
+	
+	void OnEnable(){
+		lookAtPoint = serializedObject.FindProperty("lookAtPoint");
+	}
+	
+	public override void OnInspectorGUI(){
+		serializedObject.Update();
+		EditorGUILayout.PropertyField(lookAtPoint);
+		serializedObject.ApplyModifiedProperties();
+		if(lookAtPoint.vector3Value.y > (target as LookAtPoint).transform.position.y){
+			EditorGUILayout.LabelField("(Above this object)");
+		}
+		if (lookAtPoint.vector3Value.y < (target as LookAtPoint).transform.position.y)
+        {
+            EditorGUILayout.LabelField("(Below this object)");
+        }
+	}
+}
+
+Scene视图添加====================================================
+可以通过在自定义编辑中实现OnSceneGUI来向Scene视图添加额外代码。
+
+OnSceneGUI的运行方式很像OnInspectorGUI只不过在scene视图中运行。
+为了方便在scene视图中创建自己的编辑控件，可以使用Handles类。
+其中的所有函数都是为3D模式的scene视图设计的。
+using UnityEngine;
+using UnityEditor;
+
+[CustomEditor(typeof(LookAtPoint))]
+[CanEditMultipleObjects]
+public class LookAtPointEditor : Editor{
+	SerializedProperty lookAtPoint;
+	
+	void OnEnable(){
+		lookAtPoint = serializedObject.FindProperty("lookAtPoint");
+	}
+	
+	public override void OnInspectorGUI(){
+		serializedObject.Update();
+        EditorGUILayout.PropertyField(lookAtPoint);
+        if (lookAtPoint.vector3Value.y > (target as LookAtPoint).transform.position.y)
+        {
+            EditorGUILayout.LabelField("(Above this object)");
+        }
+		if (lookAtPoint.vector3Value.y < (target as LookAtPoint).transform.position.y)
+        {
+            EditorGUILayout.LabelField("(Below this object)");
+        }  
+        serializedObject.ApplyModifiedProperties();
+	}
+	
+	public void OnSceneGUI(){
+		var t = (target as LookAtPoint);
+		EditorGUI.BeginChangeCheck();
+        Vector3 pos = Handles.PositionHandle(t.lookAtPoint, Quaternion.identity);
+		if (EditorGUI.EndChangeCheck()
+        {
+            Undo.RecordObject(target, "Move point");
+            t.lookAtPoint = pos;
+            t.Update();
+        }
+	}
+}

@@ -1,0 +1,76 @@
+编辑窗口
+可以在该应用程序中创建任意数量的自定义窗口。这些窗口的行为与Inspector，scene视图或任何其他
+内置视图类似。这是为游戏的子系统添加用户界面的好方法。
+
+创建自定义编辑窗口步骤：
+	创建一个派生自EditorWindow的脚本
+	使用代码触发窗口自行显示
+	实现工具的GUI代码
+	
+派生自EditorWindow============================
+为了创建编辑窗口，必须将脚本存储在称为“Editor”的文件夹中。在派生自EditorWindow的此脚本内
+创建一个类。然后在内部OnGui函数中编写GUI控件。
+using UnityEngine;
+using UnityEditor;
+using System.Collections;
+
+public class Example : EditorWindow{
+	void OnGUI(){
+		//the actual window code goes here
+	}
+}
+
+//显示窗口========================================
+要在屏幕上显示窗口，要创建一个菜单项来显示窗口。为此，需要创建一个有MenuItem属性激活的函数。
+在Unity中，默认情况下会保持窗口状态（因此再次选择该菜单项将显示现有窗口）。
+using UnityEngine;
+using UnityEditor;
+using System.Collections;
+
+class MyWindow : EditorWindow{
+	[MenuItem("Window/My Window")]
+	public static void ShowWindow(){
+		EditorWindow.GetWindow(typeof(MyWindow));
+	}
+	
+	void OnGUI(){
+		//the actual window code goes here
+	}
+}
+
+//实现窗口GUI======================
+应通过实现OnGUI函数来渲染窗口的实际内容。可以使用与游戏内GUI相同的UnityGUI类（GUI和GUILayout）。
+此外，也提供了一些额外的GUI控件。这些控件位于仅用于编辑的EditorGUI和EditorGUILayout类中。
+这些类将添加到普通类中已有的控件，因此可以随意混合和搭配。
+using UnityEditor;
+using UnityEngine;
+
+public class MyWindow : EditorWindow{
+	string myString = "Hello World";
+	bool groupEnabled;
+	bool myBool = true;
+	float myFloat = 1.23f;
+	
+	//add menu item named "My Window" to the Window menu
+	[MenuItem("Window/My Window")]
+	public static void ShowWindow(){
+		//show exiting window instance. if one doesn't exit, make one
+		EditorWindow.GwtWindow(typeof(MyWindows));
+	}
+	
+	void onGUI(){
+		//label标题
+		GUILayout.Label("Base Settings", EditorStyles.boldLabel);
+		//输入框
+		myString = EditorGUILayout.TextField("Text Field", myString);
+		
+		//复选框组
+		groupEnabled = EditorGUILayout.BeginToggleGroup("Optional Settings", groupEnabled);
+		//单个复选框
+		myBool = EditorGUILayout.Toggle("Toggle", myBool);
+		//slider
+		myFloat = EditorGUILayout.Slider("Slider", myFloat, -3, 3);
+		EditorGUILayout.EndToggleGroup();
+	}
+}
+

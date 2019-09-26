@@ -1,0 +1,29 @@
+自动实例化
+通常，想要对任何类型的游戏资源进行修改时，会希望在运行时进行并希望是临时操作。
+例如，如果角色选择了无敌能量块，可能想要更改玩家角色的材质——着色以便直观的展示无敌状态。
+此操作设计修改正在使用的材质。此修改不是永久性的，因此当我们退出播放模式时，就不希望材质
+具有不同的着色。
+但是Unity中，可以编写永久修改源资源的脚本。
+
+
+
+临时更改材质的着色，可以更改材质组件的着色属性===================
+private var invincibleShader = Shader.Find("Specular");
+function SatrtInvincibility{
+	render.material.shader = invincibleShader;
+}
+使用此脚本并退出播放模式，材质的状态将重置为最初进入播放模式之前的状态。
+
+
+永久修改,不可撤销=====================================
+private var invincibleShader = Shader.Find("Specular");
+function StartInvincibility{
+	render.sharedMaterial.shader = invincibleShader;
+}
+
+
+适用类成员=======================
+材质  render.material    render.sharedMaterial
+网格  meshFilter.mesh    meshFilter.sharedMesh
+物理材质 collider.material  collider.sharedMaterial
+

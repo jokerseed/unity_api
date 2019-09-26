@@ -1,0 +1,25 @@
+格式的描述
+Unity的场景格式是用YAML数据序列化语言实现的。YAML是一种开放格式，但我们无法在此对其深入介绍。
+场景中的每个对象都作为单独YAML文档写入到文件（通过---序列加入到文件中）。
+注意：此背景下，术语“对象”通指游戏对象，组件和其他场景数据；每一项都需要在场景文件中有自己的YAML文档。
+
+例如：
+--- !u!1 &6
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  importerVersion: 3
+  m_Component:
+  - 4: {fileID: 8}
+  - 33: {fileID: 12}
+  - 65: {fileID: 13}
+  - 23: {fileID: 11}
+  m_Layer: 0
+  m_Name: Cube
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+  
