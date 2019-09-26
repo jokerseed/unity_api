@@ -1,0 +1,29 @@
+有时，若可以在Unity启动时立即在项目中运行一些Editor脚本代码而无需用户进行操作。
+
+using UnityEngine;
+using UnityEditor;
+
+[InitializeOnLoad]
+public class Startup{
+	Debug.Log("Up and runing");
+}
+
+在使用任何静态函数或类实例之前始终会调用静态构造函数，
+但InitializeOnLoad属性可确保在Editor启动时调用该函数。
+
+using UnityEditor;
+using UnityEngine;
+
+[InitializeOnLoad]
+class MyClass
+{
+    static MyClass ()
+    {
+        EditorApplication.update += Update;
+    }
+
+    static void Update ()
+    {
+        Debug.Log("Updating");
+    }
+}
