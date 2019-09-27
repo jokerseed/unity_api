@@ -1,0 +1,51 @@
+精灵是2D图形对象。如果习惯于在3D空间中工作，精灵本质上只是标准纹理，但可以通过一些特殊技巧在开发
+过程中组合和管理精灵纹理以提高效率和方便性。
+Unity提供一个占位的Sprite Creator，一个内置的Sprite Editor，一个Sprite Render和一个Sprite Packer。
+
+
+精灵工具=========================================
+Sprite Creator
+使用Sprite Creator可在项目中创建占位精灵，这样就可以继续开发而无需获取或等待图形。
+
+Sprite Editor
+Sprite Editor允许从较大的图像中提取精灵图形，并在图像编辑中编辑单个纹理内的多个分量图像。
+例如，可以使用此工具将角色的手臂，腿和身体保持为一个图像中的单独元素。
+
+Sprite Render
+应使用Sprite Render组件而不是用于3D对象的Mesh Render来渲染精灵。使用该组件可将图像显示为精灵，
+以便在2D和3D场景中均可使用。
+
+Sprite Packer
+使用Sprite Packer可根据项目来优化视频内存的使用和性能。
+
+导入和设置精灵==========================================
+精灵是Unity项目中的一种资源。可通过Project视图查看精灵，并可立即使用。
+	直接将图像放入Unity项目的Assets文件夹中
+	使用Assets>Import New Asset
+	
+将图像设置为精灵=======================================
+如果项目模式设置为2D，则导入的图像将自动设置为精灵（Sprite）。
+但是，如果项目为3D，则图像将设置为纹理（Texture），因此需要更改资源的纹理类型（Texture Type）。
+
+1.单击该资源查看其Import Inspector
+2.将Texture Type设置为Sprite（2D and UI）
+
+对精灵排序=============================================
+Unity中的渲染按几个条件排序，例如图层顺序或与摄像机的距离。
+Unity的GraphicSetting（菜单：Edit>ProjectSetting>Graphics）提供了一项名为Transparency Sort Mode
+的设置，可根据精灵相对于摄像机的位置来控制精灵的排序方式。具体来说，此设置使用精灵在轴上的位置
+来确定哪些精灵相对于其他精灵透明，而哪些不透明。
+例如，若要沿Y州对精灵进行排序，可使用此设置。这种情况在2D游戏中很常见，通常需要将较高的精灵排在
+较低的精灵之后，这样会看起来更远。
+
+Transparency Sort Mode有四个可用选项：
+	Dafult-根据摄像机的Projection模式设置为Perspective还是Orthographic来进行排序
+	Perspective-根据透视图进行排序。透视图根据从摄像机位置到精灵中心的距离对精灵进行排序
+	Orthographic-根据正交视图进行排序。正交视图根据沿视图方向的距离对精灵进行排序
+	Custom Axis-根据Transparency Sort Axis中设置的指定轴进行排序（轴与摄像机的距离）
+	
+	
+使用脚本对精灵排序==============================
+var camera = GetComponent<Camera>();
+camera.transparencySortMode = TransparencySorMode.CustomAxis;
+camera.transparencySortAxis = new Vector3(0.0f, 1.0f, 0.0f);
