@@ -1,0 +1,19 @@
+创建瓦片地图（Tilemap）
+从GameObject菜单中，找到2D Object，然后选择Tilemap
+随即将在场景中创建一个带有子游戏对象的新游戏对象。此游戏对象的名称为Grid。Grid游戏对象决定了子Tilemap
+的布局。
+子游戏对象的名称为Tilemap。该游戏对象由Tilemap组件和Tilemap Renderer组件组成。Tilemap游戏对象是绘制瓦片
+的地方。
+要创建要用作“层”的其他Tilemap，选择Grid游戏对象或Tilemap游戏对象，然后在菜单中选择GameObject > 2D Object >Tilemaps,
+或右键单击所选的游戏对象并单击2D Object > Tilemap.
+随即会将一个名为Tilemap(1)的新游戏对象添加到所选游戏对象的层级视图中。在这个新游戏对象上也可以绘制瓦片。
+
+
+调整Tilemap的网格===========================
+选择Grid游戏对象。在Inspector中调整Grid组件中的值。
+Cell Size：网格中每个单元格的大小
+Cell Gap：网格中每个单元格之间的间隙大小
+Cell Swizzle：将单元格位置重排到其他轴。例如：在XYZ模式下，交换Y和Z坐标来使输入Y坐标映射到Z，反之亦然。
+
+网格中的更改会影响所有具有瓦片地图（Tilemap），瓦片地图渲染（Tilemap Render）和瓦片地图2D碰撞体
+（Tilemap Collider 2D）组件的子层游戏对象。
