@@ -1,0 +1,25 @@
+精灵遮罩
+精灵遮罩用于隐藏或显示精灵或精灵组的各个部分。精灵遮罩仅影响使用精灵渲染（Sprite Renderer）组件的对象。
+
+创建精灵遮罩======================================
+要创建精灵遮罩，从主菜单选择：GameObject > 2DPbject > Sprite Mask
+
+属性===========================================
+Sprite：要用作遮罩的精灵
+Alpha Cutoff：如果Alpha包含透明区域和不透明区域之间的混合，则可以手动确定所显示区域的分界点。通过调整
+			Alpha Cutoff滑动条即可更改此分界点。
+Range Start：Range Start是遮罩开始遮蔽时所在的排序图层（Sorting Layer）
+			Sorting Layer：遮罩的排序图层
+			Order in Layer：排序图层中的顺序
+Range End：
+		Mask All：默认情况下，此遮罩将影响其后（更低排序顺序）的所有排序图层
+		Custom：Range End可以设置为自定义Sorting Layer和Order in Layer
+		
+使用精灵遮罩===================================
+精灵遮罩游戏对象本身将在场景中不可见，只有与精灵产生的交互才可见。要查看场景中的精灵遮罩，请选择Scene
+菜单中的Sprite Mask选项。
+精灵遮罩始终有效。受精灵遮罩影响的精灵需要在Sprite Renderer中设置Mask Interaction.
+默认情况下，精灵遮罩会影响场景中将Mask Interaction设置为Visible或Not Visible Under Mask的所有精灵。我们
+通常希望遮罩仅影响特定精灵或一组精灵。
+确保遮罩与特定精灵交互的一种方法是使用排序组（Sorting Group）组件。
+Range Start和Range End可以基于精灵的Sorting Layer或Order In Layer来选择性遮蔽精灵。

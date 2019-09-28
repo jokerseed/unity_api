@@ -1,0 +1,43 @@
+9切片精灵
+9切片是一种2D技术，可允许以各种大小复用图像，而无需准备多个资源。此技术涉及将图像分成九个部分，
+确保在重新调整精灵的大小事，不同部分以不同方式缩放平铺。
+
+设置9切片精灵=============================
+在对精灵进行9切片之前，需要确保Mesh Type设置为Full Rect。要应用此设置，先选择精灵，然后在Inspector
+窗口中单击Mesh Type下拉选单并选择Full Rect。如果Mesh Type设置为Tight，由于设置9切片精灵时精灵渲染
+（Sprite Renderer）生成和渲染精灵的方式，9切片可能运行不正常。
+设置完后，点击apply，然后将精灵从Project窗口拖入scene视图，从而开始对其进行处理。
+
+对精灵进行9切片==================================
+在Scene视图或Hierarchy窗口中选择精灵。在Inspector窗口中，导航到Sprite Renderer组件，更改Draw Mode
+属性。
+Simple：这是默认的精灵渲染行为。当图像尺寸发生变化时，图像朝所有方向缩放。Simple不用于9切片。
+Sliced：在Sliced模式下，角点的大小保持不变，精灵的顶部和底部水平拉伸，精灵的两侧垂直拉伸，精灵
+		的中心水平和垂直拉伸，从而适应精灵的大小。变换组件会在不应用9切片的情况下缩放精灵。
+Tiled：在Tiled模式下，精灵保持相同的大小，不会缩放。取而代之的行为是，精灵的顶部和底部水平重复，
+		精灵的两侧垂直重复，精灵的中心以平铺形式重复，从而适应精灵的大小。
+		
+		
+选择Tiled是会出现一个Tile Mode：
+	当Draw Mode设置为Tiled时，使用Tile Mode属性可控制当精灵尺寸发生变化时各部分的重复方式。
+Continuous：默认情况下，Tile Mode设置为Continuous。当精灵的大小改变时，重复部分在精灵中均匀重复。
+Adaptive：当Tile Mode设置为Adaptive时，重复部分仅在精灵的尺寸达到Stretch Value时才进行重复。
+			使用Stretch Value滑动条可设置介于0到1之间的值。
+			注意，1表示图像调整为原始尺寸的2倍，因此如果Stretch Value设置为1，则当图像拉伸到
+			原始大小的两倍时，该部分将会重复。
+			
+9切片和碰撞体=========================================
+如果精灵已附加Collider2D，需要确保在更改精灵的尺寸时，Collider2D随之改变。
+Unity中支持9切片的Collider2D组件只有2D盒形碰撞体（Box Collider2D）和2D多边形碰撞体（Polygon Collider 2D）。
+这两个Collider2D具有Auto Tiling复选框。要确保Collider2D组件设置为支持9切片，请选择要应用组件的
+精灵，导航到Inspector窗口中的Collider2D，然后勾选Auto Tiling复选框。这样可以自动更新Collider2D
+形状，意味着精灵的尺寸变化时，会自动重新调整形状。如果没有启用Auto Tiling，即使精灵的尺寸变化，
+Collider2D也会保持相同的形状和大小。
+
+限制和已知问题=========================================
+只有两个Collider2D支持9切片，分别为BoxCollider2D和PolygonCollider2D。
+
+精灵渲染的Draw Mode设置为Sliced或Tiled是，无法编辑BoxColider2D和PolygonCollider2D。Inspector窗口
+中会禁用编辑功能，并告知由于Collider2D由精灵渲染组件的平铺属性过驱动，因此无法对其进行编辑。
+
+以Auto Tiling模式重新生成该形状时，其他边缘可能出现在Collider2D的形状之内。这可能会对碰撞产生影响。
