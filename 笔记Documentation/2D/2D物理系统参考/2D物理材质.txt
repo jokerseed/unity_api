@@ -1,0 +1,12 @@
+2D物理材质（Physics Material 2D）用于调整2D物理对象碰撞时这些对象之间的摩擦和弹性。可通过Assets菜单
+Assets > Create > Physics Material 2D   创建2D物理材质。
+
+
+属性：
+Friction：此碰撞体的摩擦系数。
+Bounciness：碰撞从表面反弹的程度。值为0表示没有弹性，而值为1表示完美弹性，没有能量损失。
+
+
+详细信息：
+要是用2D物理材质，只需将其拖动到已附加2D碰撞体的对象上，获将其拖动到Inspector中的碰撞体组件。
+注意：在3D物理中，等效资源称为Physic Material（物理材质）（即physic末尾没有S）。在脚本中不要混淆这两种拼写。

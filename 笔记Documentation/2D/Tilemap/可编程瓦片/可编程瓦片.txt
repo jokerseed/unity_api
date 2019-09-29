@@ -1,0 +1,9 @@
+可编程瓦片
+创建可编程瓦片
+创建一个继承自TileBase（或TileBase的任何有用子类，如Tile）的新类。重写新的Tile类所需的所有方法。以下是
+将要重写的常用方法：
+	RefreshTile确定将此瓦片添加到瓦片地图是所更新的附近瓦片
+	getTileData确定瓦片在瓦片地图上的外观
+
+使用 ScriptableObject.CreateInstance<YOUR_TILE_CLASS>() 创建该新类的实例。
+可通过调用 AssetDatabase.CreateAsset() 将此新实例转换为 Editor 中的资源以便重复使用。

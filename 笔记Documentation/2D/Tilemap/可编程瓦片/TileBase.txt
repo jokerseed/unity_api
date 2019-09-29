@@ -1,0 +1,21 @@
+所有要添加到瓦片地图的瓦片必须继承自TileBase。TileBase为瓦片地图提供了一组固定API来传达其渲染属性。对于
+API的大多数情况，瓦片的位置和瓦片所在瓦片地图的实例作为API的参数传入。由此可确定用于设置瓦片信息的所有
+必须属性。
+
+public void RefreshTile(Vector3Int location, Itilemap tilemap)
+
+RefreshTile确定将此瓦片添加到瓦片地图是所更新的附近瓦片。默认情况下，TileBase调用tilemap.Refresh(location)
+来刷新当前位置的瓦片。对此进行重写可以确定由于放置新瓦片而需要刷新的瓦片。
+
+public bool GetTileData(Vector3Int location, ITilemap tilemap, ref TileData tiledata)
+
+GetTileData确定瓦片在瓦片地图上的外观。
+
+public bool GetTileAnimationData(Vector3Int location, Itilemap tilemap, ref TileAnimationData tileAnimationData)
+
+GetTileAnimationData确定瓦片是否已动画化。如果瓦片有动画，则返回true，否则返回false。
+
+public bool StartUp(Vector3Int location, ITilemap tilemap, GameObject go)
+
+当瓦片地图第一次更新时，将为每个瓦片调用StartUp。如有必要，可为瓦片地图上的瓦片运行任何启动逻辑。
+参数go是调用GetTileData时作为游戏对象而传入的对象的实例化版本。也可根据需要更新go。

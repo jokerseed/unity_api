@@ -1,0 +1,13 @@
+2D盒型碰撞体组件是用于2D物理的碰撞体。该碰撞体的形状是矩形，在精灵的局部坐标空间中具有定义的位置，宽度
+和高度。请注意，矩形为轴对齐，即矩形的边与局部空间的X或Y轴平行。
+
+属性：
+Material
+Is Trigger:
+Use by Effector:
+Use by Composite：如果希望此碰撞体由附加的2D复合碰撞体（Composite Collider 2D）使用
+Auto Tiling：如果所选精灵的精灵渲染（Sprite Renderer）组件将Draw Mode设置为Tiled，需要选中这个。
+			这样可以自动更新2D碰撞体的形状，意味着精灵的尺寸变化时，会自动重新调整形状。
+Offset：
+Size：按局部空间单位设置盒体的大小
+Edge Radius：控制边缘周围的半径，使顶点为圆形。这会产生一个具有圆凸角的更大2D碰撞体。此设置的默认值是0

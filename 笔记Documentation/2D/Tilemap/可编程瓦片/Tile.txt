@@ -1,0 +1,39 @@
+Tile
+Tile类是一个允许在瓦片地图上渲染精灵的简单类。Tile继承自TileBase。
+
+public Sprite sprite;
+public Color color = Color.white;
+public Matrix4x4 transform = Matrix4x4.identify;
+public GameObject gameobject = null;
+public TileFlags flags = TileFlags.LockColor;
+
+public ColliderType colliderType = ColliderType.Sprite;
+
+这些事Tile的默认属性。如果通过将精灵拖放到Tilemap Palette上来创建瓦片，则瓦片会将Sprite属性设置为已放入
+的精灵。可调整瓦片实例的属性来获取所需的瓦片。
+
+public void RefreshTile(Vector3Int location, ITilemap tilemap)
+
+不会由TileBase重写。默认情况下，仅刷新该位置的瓦片。
+
+public override void GetTileData(Vector3Int location, ITilemap tilemap, ref TileData tileData)
+{
+	tileData.sprite = this.sprite;
+	tileData.color = this.color;
+	tileData.transform = this.transform;
+	tileData.gameobject = this.gameobject;
+	tileData.flags = this.flags;
+
+tileData.colliderType = this.colliderType;
+}
+
+通过将Tile实例的属性复制到tileData来填充瓦片地图渲染瓦片时所需的信息。
+
+public bool GetTileAnimationData(Vector3Int location, ITilemap tilemap, ref TileAnimationData tileAnimationData)
+
+不会由 TileBase 重写。默认情况下，Tile 类不运行任何瓦片动画并会返回 false。
+
+public bool StartUp(Vector3Int location, ITilemap tilemap, GameObject go)
+
+不会由 TileBase 重写。默认情况下，Tile 类没有任何特殊的启动功能。
+如果设置了 tileData.gameobject，则瓦片地图仍会在启动时将其实例化并将其放置在瓦片的位置。

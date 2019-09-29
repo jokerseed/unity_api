@@ -1,0 +1,8 @@
+瓦片贴图和2D物理
+可将Tilemap Collider 2D组件添加到瓦片地图的游戏对象来根据瓦片地图的瓦片生成碰撞体。
+
+Tilemap Collider 2D组件的功能类似于普通的Collider 2D组件。可添加Effector 2D来修改Tilemap Collider 2D的行为。
+还可以使用Composite Collider 2D来合成Tilemap Collider 2D。
+
+如果添加或删除Collider Type设置为Sprite或Grid的瓦片，则会在Tilemap Collider 2D的下一次LateUpdate时添加或删除瓦片
+在Tilemap Collider 2D组件中的碰撞体形状。
